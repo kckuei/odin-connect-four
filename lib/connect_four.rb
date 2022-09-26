@@ -114,7 +114,7 @@ class ConnectFour
   def assign_players
     puts 'Player 1:'
     @player1 = Player.new(1, '●')
-    puts 'Player 2:'
+    puts "\nPlayer 2:"
     @player2 = Player.new(2, '◌')
   end
 end

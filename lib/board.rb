@@ -58,12 +58,12 @@ class Board
       end
       draw_row if i < @rows - 1
     end
-    puts "\n\n"
+    puts "\n 0   1   2   3   4   5   6 \n\n"
   end
 
   # Pads values, supports draw_board
   def format(val)
-    val.to_s.rjust(3, ' ')
+    val.to_s.center(3, ' ')
   end
 
   # Draw value, supports draw_board
@@ -81,14 +81,14 @@ class Board
 
   # Draw divider, supports draw_board
   def draw_divider
-    print '║'
+    print "\e[91m║\e[0m"
   end
 
   # Draws a row, supports draw_board
   def draw_row
     row = "\n"
-    (@columns - 1).times { row << '═══╬' }
-    row << '═══'
+    (@columns - 1).times { row << "\e[91m═══╬\e[0m" }
+    row << "\e[91m═══\e[0m"
     puts row
   end
 
@@ -236,6 +236,6 @@ class Board
 
   # Check if game over
   def game_over?(avatars)
-    winner?(avatars) || board.flatten.count('').zero?
+    winner?(avatars) || @board.flatten.count('').zero?
   end
 end

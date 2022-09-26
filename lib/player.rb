@@ -3,12 +3,18 @@
 # A player class
 #
 # Attributes
+#   @id - an integer representing generic player #
+#   @avatar - string representing player avatar
 #   @name - string representing user name
 #   @wins - an integer representing user wins
 #   @losses - an integer representing user losses
 class Player
+  attr_reader :id, :avatar, :name, :wins, :losses
+
   # Initializes Player instance
-  def initialize
+  def initialize(id, avatar)
+    @id = id
+    @avatar = avatar
     @name = ask_for_name
     @wins = 0
     @losses = 0

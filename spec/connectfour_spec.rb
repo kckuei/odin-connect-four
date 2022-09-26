@@ -69,7 +69,7 @@ describe Board do
   describe '#horizontal_winner?' do
     subject(:gboard) { described_class.new(6, 7) }
 
-    context 'when there is a horizontal winner' do
+    context 'when there is a horizontal winner - x' do
       it 'returns true' do
         avatar_winner = 'x'
         board_horizontal = [
@@ -105,7 +105,7 @@ describe Board do
   describe '#vertical_winner?' do
     subject(:gboard) { described_class.new(6, 7) }
 
-    context 'when there is a vertical winner' do
+    context 'when there is a vertical winner - o' do
       it 'returns true' do
         avatar_winner = 'o'
         board_vertical = [
@@ -139,12 +139,69 @@ describe Board do
   end
 
   describe '#diaganol_winner?' do
-    context 'when there is a diaganol winner' do
-      xit 'returns true' do
+    subject(:gboard) { described_class.new(6, 7) }
+
+    context 'when there is a diaganol winner - x - bl_tr' do
+      it 'returns true' do
+        avatar_winner = 'x'
+        board_diag = [
+          ['', '', '', '', '', '', ''],
+          ['', '', '', '', '', '', ''],
+          ['x', 'x', 'o', 'o', 'x', '', ''],
+          ['x', 'x', 'o', 'x', 'x', '', ''],
+          ['o', 'o', 'x', 'o', 'o', '', ''],
+          ['x', 'x', 'o', 'o', 'x', '', '']
+        ]
+        gboard.instance_variable_set(:@board, board_diag)
+        expect(gboard.diaganol_winner?(avatar_winner)).to be true
       end
     end
-    context 'when there is no diaganol winner' do
-      xit 'returns false' do
+
+    context 'when there is a diaganol winner - o - tl_br' do
+      it 'returns true' do
+        avatar_winner = 'o'
+        board_diag = [
+          ['', '', '', '', '', '', ''],
+          ['', '', '', '', '', '', ''],
+          ['o', 'x', 'o', 'o', 'x', '', ''],
+          ['x', 'o', 'x', 'x', 'x', '', ''],
+          ['o', 'x', 'o', 'o', 'o', '', ''],
+          ['x', 'x', 'o', 'o', 'x', '', '']
+        ]
+        gboard.instance_variable_set(:@board, board_diag)
+        expect(gboard.diaganol_winner?(avatar_winner)).to be true
+      end
+    end
+
+    context 'when there is no diaganol winner - o' do
+      it 'returns false' do
+        avatar = 'o'
+        board_diag = [
+          ['', '', '', '', '', '', ''],
+          ['', '', '', '', '', '', ''],
+          ['x', '', '', '', 'x', '', ''],
+          ['x', 'x', '', 'o', 'x', '', ''],
+          ['o', 'o', 'x', 'o', 'o', '', ''],
+          ['x', 'x', 'o', 'o', 'x', 'o', '']
+        ]
+        gboard.instance_variable_set(:@board, board_diag)
+        expect(gboard.diaganol_winner?(avatar)).to be false
+      end
+    end
+
+    context 'when there is no diaganol winner - x' do
+      it 'returns false' do
+        avatar = 'x'
+        board_diag = [
+          ['', '', '', '', '', '', ''],
+          ['', '', '', '', '', '', ''],
+          ['x', '', '', '', 'x', '', ''],
+          ['x', 'x', '', 'o', 'x', '', ''],
+          ['o', 'o', 'x', 'o', 'o', '', ''],
+          ['x', 'x', 'o', 'o', 'x', 'o', '']
+        ]
+        gboard.instance_variable_set(:@board, board_diag)
+        expect(gboard.diaganol_winner?(avatar)).to be false
       end
     end
   end

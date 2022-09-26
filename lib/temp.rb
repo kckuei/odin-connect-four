@@ -68,46 +68,52 @@ def max_count(iterable, avatar)
 end
 
 @rows = 6
-@cols = 7
-# These are base/seed squares corresponding to the left/top edges
-list_TL_BR = []
-(0..@cols - 1).each { |i| list_TL_BR << [0, i] }
-(1..@rows - 1).each { |i| list_TL_BR << [i, 0] }
-p list_TL_BR
+@columns = 7
 
-# These are the base/seed squares corresponding to the left/bottom edges
-list_BL_TR = []
-(0..@rows - 1).each { |i| list_BL_TR << [i, 0] }
-(1..@cols - 1).each { |i| list_BL_TR << [5, i] }
-p list_BL_TR
+# Get the base/seed squares
+def diaganol_seeds
+  # Squares corresponding to left/top edges
+  list_top_left_bott_right = []
+  (0..@columns - 1).each { |i| list_top_left_bott_right << [0, i] }
+  (1..@rows - 1).each { |i| list_top_left_bott_right << [i, 0] }
 
-# We will form diaganol lines from the base squares in their respective
-# directions. The maximum diaganol is constrained by the number of rows.
-# So we want to extend each of the base/seed squares by rows-1 times.
-all_diaganols = []
-list_TL_BR.each do |base|
-  diaganol = [base]
-  (@rows - 1).times do |i|
-    offset = i + 1
-    next_point = [base[0] + offset, base[1] + offset]
-    diaganol << next_point if inside_board?(next_point)
-  end
-  p diaganol
-  all_diaganols << diaganol
+  # Squares corresponding to left/bottom edges
+  list_bott_left_top_right = []
+  (0..@rows - 1).each { |i| list_bott_left_top_right << [i, 0] }
+  (1..@columns - 1).each { |i| list_bott_left_top_right << [5, i] }
+  [list_top_left_bott_right, list_bott_left_top_right]
 end
 
-list_BL_TR.each do |base|
-  diaganol = [base]
-  (@rows - 1).times do |i|
-    offset = i + 1
-    next_point = [base[0] - offset, base[1] + offset]
-    diaganol << next_point if inside_board?(next_point)
+# Forms the diaganol lines from the base/seed squares in their respective directions.
+# The maximum length of the diaganol is constrained by the number of rows.
+# We'll extend each of the base/seed squares by rows-1 times, keeping only those points inside the board.
+def form_diaganols
+  tl_br, bl_tr = diaganol_seeds
+
+  all_diaganols = []
+  tl_br.each do |base|
+    diaganol = [base]
+    (@rows - 1).times do |i|
+      offset = i + 1
+      next_point = [base[0] + offset, base[1] + offset]
+      diaganol << next_point if inside_board?(next_point)
+    end
+    all_diaganols << diaganol
   end
-  p diaganol
-  all_diaganols << diaganol
+
+  bl_tr.each do |base|
+    diaganol = [base]
+    (@rows - 1).times do |i|
+      offset = i + 1
+      next_point = [base[0] - offset, base[1] + offset]
+      diaganol << next_point if inside_board?(next_point)
+    end
+    all_diaganols << diaganol
+  end
+  all_diaganols
 end
 
-# we must check all the lines in all_diaganols
+# Given an array representing diaganol points, returns an array of the board values
 def get_diaganol_values(diaganol_points)
   values = []
   diaganol_points.each do |points|
@@ -116,6 +122,8 @@ def get_diaganol_values(diaganol_points)
   end
   values
 end
+
+all_diaganols = form_diaganols
 
 idx = 15
 puts "diaganol #{idx}"

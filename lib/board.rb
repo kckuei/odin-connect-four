@@ -3,10 +3,11 @@
 # Board class for connect4 game.
 #
 # Attributes
-#   @rows - an int representing number of rows (default 6)
-#   @columns - an int representing number of columns (default 7)
+#   @rows - an integer representing number of rows (default 6)
+#   @columns - an integer representing number of columns (default 7)
 #   @board - a nested array, representing the 2D board ('' denotes empty slot)
 #   @mapping - 1D to 2D mapping (not used)
+#   @diaganols - a nested array, representing all the diaganols to check for a win condition
 class Board
   attr_accessor :board # TEMPORARY ACCESSOR FOR TESTING
 
@@ -16,6 +17,7 @@ class Board
     @columns = columns
     @board = make_gameboard(rows, columns)
     @mapping = make_mapping(rows, columns)
+    @diaganols = form_diaganols
   end
 
   # Creates game board
@@ -159,7 +161,64 @@ class Board
 
   # Check diaganol winner condition, contiguous
   def diaganol_winner?(avatar)
-    # TO DO TO DO TO DO
+    @diaganols.each do |diag|
+      values = get_diaganol_values(diag)
+      return true if max_count(values, avatar) >= 4
+    end
+    false
+  end
+
+  # Get the base/seed squares
+  def diaganol_seeds
+    # Squares corresponding to left/top edges (top-left -> bottom-right)
+    tl_br = []
+    (0..@columns - 1).each { |i| tl_br << [0, i] }
+    (1..@rows - 1).each { |i| tl_br << [i, 0] }
+
+    # Squares corresponding to left/bottom edges  (bottom-left -> top-right)
+    bl_tr = []
+    (0..@rows - 1).each { |i| bl_tr << [i, 0] }
+    (1..@columns - 1).each { |i| bl_tr << [5, i] }
+
+    [tl_br, bl_tr]
+  end
+
+  # Forms the diaganol lines from the base/seed squares in their respective directions.
+  # The maximum length of the diaganol is constrained by the number of rows.
+  # We'll extend each of the base/seed squares by rows-1 times, keeping only those points inside the board.
+  def form_diaganols
+    tl_br, bl_tr = diaganol_seeds
+    all_diaganols = []
+    tl_br.each do |base|
+      diaganol = [base]
+      (@rows - 1).times do |i|
+        offset = i + 1
+        next_point = [base[0] + offset, base[1] + offset]
+        diaganol << next_point if inside_board?(next_point)
+      end
+      all_diaganols << diaganol
+    end
+
+    bl_tr.each do |base|
+      diaganol = [base]
+      (@rows - 1).times do |i|
+        offset = i + 1
+        next_point = [base[0] - offset, base[1] + offset]
+        diaganol << next_point if inside_board?(next_point)
+      end
+      all_diaganols << diaganol
+    end
+    all_diaganols
+  end
+
+  # Given an array representing diaganol points, returns an array of the board values
+  def get_diaganol_values(diaganol_points)
+    values = []
+    diaganol_points.each do |points|
+      i, j = points
+      values << @board[i][j]
+    end
+    values
   end
 
   # Check overall winner condition

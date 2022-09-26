@@ -13,6 +13,7 @@ toy command line connect four game implemented using TDD and ruby
 ### to do 
 ---
 * Implement recursive or non-recursive diaganol solution
+  * some ideas for implementation: https://leetcode.com/problems/longest-line-of-consecutive-one-in-matrix/solution/
 * Use special unicode pieces
 * Color the pieces
 * How will the player interact with the game?
@@ -26,5 +27,6 @@ toy command line connect four game implemented using TDD and ruby
 ### design decisions
 ---
 * There probably is a nice recursive solution that is faster, but I just considerd diaganol, horizontal, and vertical win conditions seperately; looping over all possibles lines, and keeping track of the counts to 4
+* For the diaganols, I identify all the diaganol lines, lines to check, and pass them as an iterable into the same checker for horizontal and vertical
 * I borrowed some code from tic tac toe, but one game mechanics difference is specifying moves by location versus by column for connect4. Subsequently, a 1D to 2D mapping for related tiled numbers for displays to coordinates was not necessary. 
 * One nice trick for inserting pieces I realized is to insert into the first empty slot using somethign like a reverse_each_with_index.  

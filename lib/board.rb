@@ -8,7 +8,7 @@
 #   @board - a nested array, representing the 2D board ('' denotes empty slot)
 #   @mapping - 1D to 2D mapping (not used)
 class Board
-  attr_accessor :board
+  attr_accessor :board # TEMPORARY ACCESSOR FOR TESTING
 
   # Initializes Board instance
   def initialize(rows = 6, columns = 7)
@@ -101,7 +101,8 @@ class Board
 
   # Checks if valid player move
   def valid_move?(col_idx)
-    col_idx >= 0 && col_idx < @columns
+    column = @board.reduce([]) { |a, row| a << row[col_idx] }
+    col_idx >= 0 && col_idx < @columns && column.count('').positive?
   end
 
   # Updates the board value at a specific location

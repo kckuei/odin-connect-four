@@ -27,6 +27,11 @@ class Board
     board
   end
 
+  # Resets game board
+  def reset_board
+    @board = make_gameboard(@rows, @columns)
+  end
+
   # Creates 1D to 2D game board mapping
   # Not required for for this game, but useful for tiling numbers if desired.
   # Can also be used to implement an alternative move specificiation.

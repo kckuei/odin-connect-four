@@ -34,6 +34,7 @@ class ConnectFour
       #   update player scores
       #   display winner and scoreboard
       #   hit any key to continue
+      #   reset gameboard
       # else break from loop
     end
   end

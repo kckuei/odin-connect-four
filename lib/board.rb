@@ -2,6 +2,10 @@
 
 # Board class for connect4 game.
 #
+# You can instantiate a 2D game board of arbitrary size. Various methods are implemented
+# for plotting the board, updating or resetting the board, validating moves, and checking for
+# winning conditions (horizontal, vertical, diaganol).
+#
 # Attributes
 #   @rows - an integer representing number of rows (default 6)
 #   @columns - an integer representing number of columns (default 7)
@@ -11,7 +15,7 @@
 class Board
   attr_reader :rows, :columns
 
-  # Initializes Board instance
+  # Initializes Board instance.
   def initialize(rows = 6, columns = 7)
     @rows = rows
     @columns = columns
@@ -20,19 +24,19 @@ class Board
     @diaganols = form_diaganols
   end
 
-  # Creates game board
+  # Creates game board of height rows, width columns.
   def make_gameboard(rows, columns)
     board = []
     rows.times { board << Array.new(columns, '') }
     board
   end
 
-  # Resets game board
+  # Resets game board to empty.
   def reset_board
     @board = make_gameboard(@rows, @columns)
   end
 
-  # Creates 1D to 2D game board mapping
+  # Creates 1D to 2D game board mapping.
   # Not required for for this game, but useful for tiling numbers if desired.
   # Can also be used to implement an alternative move specificiation.
   def make_mapping(rows, columns)
@@ -47,7 +51,8 @@ class Board
     grid_map
   end
 
-  # Draws the board
+  # Draws the board, including pieces.
+  # show_open_moves flag is for showing tiled numbers.
   def draw_board(show_open_moves = false)
     k = 0
     (0..@rows - 1).each do |i|
@@ -61,12 +66,14 @@ class Board
     puts "\n 0   1   2   3   4   5   6 \n\n"
   end
 
-  # Pads values, supports draw_board
+  # Adds consistent padding so board draws correctly.
+  # Supports draw_board.
   def format(val)
     val.to_s.center(3, ' ')
   end
 
-  # Draw value, supports draw_board
+  # Draw value
+  # Supports draw_board.
   def draw_value(val, idx, show_open_moves)
     if val.empty?
       if show_open_moves
@@ -79,12 +86,14 @@ class Board
     end
   end
 
-  # Draw divider, supports draw_board
+  # Draw divider.
+  # Supports draw_board.
   def draw_divider
     print "\e[91m║\e[0m"
   end
 
-  # Draws a row, supports draw_board
+  # Draws a row.
+  # Supports draw_board.
   def draw_row
     row = "\n"
     (@columns - 1).times { row << "\e[91m═══╬\e[0m" }
@@ -92,12 +101,12 @@ class Board
     puts row
   end
 
-  # Updates the board given a column
+  # Updates the board given a column index.
   def update_board(col_idx, avatar)
     return unless valid_move?(col_idx)
 
-    # functions like .reverse_each_wth_index
-    # drops a value intot he board from bottom up
+    # functions like a #reverse_each_wth_index
+    # It drops a value into the board from the bottom up by finding first nil.
     @board.to_enum.with_index.reverse_each do |row, row_idx|
       if row[col_idx].empty?
         @board[row_idx][col_idx] = avatar
@@ -106,13 +115,13 @@ class Board
     end
   end
 
-  # Checks if valid player move
+  # Checks if the specified columns index is a valid move.
   def valid_move?(col_idx)
     column = @board.reduce([]) { |a, row| a << row[col_idx] }
     col_idx >= 0 && col_idx < @columns && column.count('').positive?
   end
 
-  # Updates the board value at a specific location
+  # Updates the board value at a specific location.
   def update_point(point, avatar)
     return unless valid_move_by_point?(point)
 
@@ -120,14 +129,14 @@ class Board
     @board
   end
 
-  # Given a specific point, checks if it is a valid move
+  # Given a specific point, checks if it is a valid move.
   def valid_move_by_point?(point)
     return false unless inside_board?(point) && @board[point[0]][point[1]]
 
     true
   end
 
-  # Checks if point is inside board
+  # Checks if point is inside board.
   def inside_board?(point)
     x, y = point
     return true if x >= 0 && x < @rows && y >= 0 && y < @columns
@@ -135,7 +144,7 @@ class Board
     false
   end
 
-  # Given an iterable, counts the occurences of contiguous avatars
+  # Given an iterable, counts the occurences of contiguous avatars.
   def max_count(iterable, avatar)
     count = max_len = 0
     iterable.each do |val|
@@ -145,7 +154,7 @@ class Board
     max_len
   end
 
-  # Check horizontal winner condition, contiguous
+  # Checks for horizontal winning condition (contiguous connect 4).
   def horizontal_winner?(avatar)
     @board.each do |row|
       len = max_count(row, avatar)
@@ -154,7 +163,7 @@ class Board
     false
   end
 
-  # Check vertical winner condition, contiguous
+  # Checks for vertical winning condition (contiguous connect 4).
   def vertical_winner?(avatar)
     @columns.times do |i|
       col = @board.reduce([]) { |a, row| a << row[i] }
@@ -164,7 +173,7 @@ class Board
     false
   end
 
-  # Check diaganol winner condition, contiguous
+  # Check for diaganol winning condition (contiguous connect 4).
   def diaganol_winner?(avatar)
     @diaganols.each do |diag|
       values = get_diaganol_values(diag)
@@ -173,7 +182,8 @@ class Board
     false
   end
 
-  # Get the base/seed squares
+  # Get the base squares of the game board that are used to seed diaganol lines.
+  # Supports diaganol_winner?.
   def diaganol_seeds
     # Squares corresponding to left/top edges (top-left -> bottom-right)
     tl_br = []
@@ -188,9 +198,10 @@ class Board
     [tl_br, bl_tr]
   end
 
-  # Forms the diaganol lines from the base/seed squares in their respective directions.
-  # The maximum length of the diaganol is constrained by the number of rows.
-  # We'll extend each of the base/seed squares by rows-1 times, keeping only those points inside the board.
+  # Forms diaganol lines from the base squares given by diaganol_seeds.
+  # The maximum length of a given diaganol is constrained by the number of rows.
+  # Each base square is extended by rows-1 times, keeping only those points residing inside the board.
+  # Supports diaganol_winner?.
   def form_diaganols
     tl_br, bl_tr = diaganol_seeds
     all_diaganols = []
@@ -217,6 +228,7 @@ class Board
   end
 
   # Given an array representing diaganol points, returns an array of the board values
+  # Supports diaganol_winner?.
   def get_diaganol_values(diaganol_points)
     values = []
     diaganol_points.each do |points|
@@ -226,7 +238,7 @@ class Board
     values
   end
 
-  # Check overall winner condition
+  # Check for an overall winning condition.
   def winner?(avatars)
     avatars.each do |avatar|
       return true if horizontal_winner?(avatar) || vertical_winner?(avatar) || diaganol_winner?(avatar)
@@ -234,7 +246,8 @@ class Board
     false
   end
 
-  # Check if game over
+  # Checks if the game is over.
+  # The game is over if we have a winner or there are no more free spaces.
   def game_over?(avatars)
     winner?(avatars) || @board.flatten.count('').zero?
   end

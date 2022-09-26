@@ -3,11 +3,80 @@
 require_relative '../lib/connect_four'
 
 describe ConnectFour do
-  # Placeholder
+  describe '#validate_input' do
+    subject(:game) { described_class.new }
+
+    context 'when passed a valid string' do
+      it 'returns true' do
+        valid_input = '2'
+        expect(game.validate_input(valid_input)).to be true
+      end
+    end
+
+    context 'when passed an invalid string (symbols)' do
+      before { allow(game).to receive(:puts) } # suppresses puts
+      it 'returns false' do
+        invalid_input = '@3!'
+        expect(game.validate_input(invalid_input)).to be false
+      end
+    end
+
+    context 'when passed an invalid string (negative)' do
+      before { allow(game).to receive(:puts) } # suppresses puts
+      it 'returns false' do
+        invalid_input = '-1'
+        expect(game.validate_input(invalid_input)).to be false
+      end
+    end
+  end
+
+  describe '#next_player' do
+    subject(:game) { described_class.new }
+    let(:player1) { double('player1', id: 1) }
+    let(:player2) { double('player2', id: 2) }
+
+    context 'when player 1 is the current player' do
+      before do
+        game.instance_variable_set(:@player1, player1)
+        game.instance_variable_set(:@player1, player2)
+        game.instance_variable_set(:@current_player, player1)
+      end
+      it 'changes curren player to player 2' do
+        game.next_player
+        expect(game.instance_variable_get(:@current_player)).to eq player2
+      end
+    end
+  end
 end
 
 describe Player do
-  # Placeholder
+  describe '#ask_for_name' do
+    subject(:player) { described_class.new(1, 'o') }
+
+    context 'when a valid name is given' do
+      before do
+        allow(player).to receive(:puts) # suppresses puts
+        allow(player).to receive(:gets).and_return('Kevin')
+      end
+
+      it 'the player name should update' do
+        player.ask_for_name
+        expect(player.name).to eq('Kevin')
+      end
+    end
+
+    context 'when a an invalid (empty) name is given twice' do
+      before do
+        allow(player).to receive(:puts) # suppresses puts
+        allow(player).to receive(:gets).and_return('', '', 'Kevin')
+      end
+
+      it 'should request user name at least three times' do
+        expect(player).to receive(:gets).at_least(3).times
+        player.ask_for_name
+      end
+    end
+  end
 end
 
 describe Board do

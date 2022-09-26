@@ -63,7 +63,7 @@ class Board
       end
       draw_row if i < @rows - 1
     end
-    puts "\n 0   1   2   3   4   5   6 \n\n"
+    puts "\n" << (0..@columns - 1).reduce(' ') { |a, i| a << i.to_s.ljust(4, ' ') } << "\n\n"
   end
 
   # Adds consistent padding so board draws correctly.

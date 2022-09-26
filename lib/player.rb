@@ -15,7 +15,7 @@ class Player
   def initialize(id, avatar)
     @id = id
     @avatar = avatar
-    @name = ask_for_name
+    @name = ''
     @wins = 0
     @losses = 0
   end
@@ -30,7 +30,7 @@ class Player
       puts 'Enter a user name'
       user_name = gets.chomp
     end
-    user_name
+    @name = user_name
   end
 
   # Increments the player wins.

@@ -2,6 +2,14 @@
 
 require_relative '../lib/connect_four'
 
+describe ConnectFour do
+  # Placeholder
+end
+
+describe Player do
+  # Placeholder
+end
+
 describe Board do
   describe '#make_gameboard' do
     subject(:gboard) { described_class.new(6, 7) }

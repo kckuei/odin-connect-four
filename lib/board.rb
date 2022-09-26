@@ -158,7 +158,9 @@ class Board
   end
 
   # Check diaganol winner condition, contiguous
-  def diaganol_winner?(avatar); end
+  def diaganol_winner?(avatar)
+    # TO DO TO DO TO DO
+  end
 
   # Check overall winner condition
   def winner?(avatars)

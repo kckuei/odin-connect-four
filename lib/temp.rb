@@ -1,4 +1,5 @@
 require_relative './board'
+require_relative './intro'
 
 @board = [
   ['', '', '', '', '', '', ''],
@@ -23,3 +24,7 @@ new_board.draw_board
 idx = 0
 col = new_board.board.reduce([]) { |a, row| a << row[idx] }
 puts col.count('')
+
+intro = Intro.new
+intro.show_intro
+

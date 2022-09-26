@@ -10,10 +10,18 @@ toy command line connect four game implemented using TDD and ruby
 * pieces fall straight down
 * objective is to be first to form a horizontal, vertical, or diaganol line of four of one's own tokens
 
-### other notes
+### to do 
 ---
-* Use special unicode pieces that are colored for visualizing the board
-* Think about the interfaces, and what key functionality I want to test and how to do so
+* Implement recursive or non-recursive diaganol solution
+* Use special unicode pieces
+* Color the pieces
+* How will the player interact with the game?
+  * choose your own avatar?
+  * specify your name?
+  * game loop?
+* Implement Player methods
+* Implement Game methods
+* Finish tests
 
 ### design decisions
 ---

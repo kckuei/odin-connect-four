@@ -2,6 +2,7 @@
 
 require_relative './board'
 require_relative './player'
+require_relative './intro'
 
 # Connect Four class for playing a connect4 game
 class ConnectFour

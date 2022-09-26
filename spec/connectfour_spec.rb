@@ -30,6 +30,42 @@ describe Board do
     end
   end
 
+  describe '#valid_move?' do
+    subject(:gboard) { described_class.new(6, 7) }
+
+    context 'when a move is not valid because the column is full' do
+      it 'returns false' do
+        move_on_column_index = 0
+        board_invalid = [
+          ['x', '', '', '', '', '', ''],
+          ['o', '', '', '', '', '', ''],
+          ['x', 'o', '', '', '', '', ''],
+          ['x', 'x', 'x', 'x', '', '', ''],
+          ['o', 'o', 'x', 'o', '', '', ''],
+          ['x', 'x', 'o', 'o', '', '', 'o']
+        ]
+        gboard.instance_variable_set(:@board, board_invalid)
+        expect(gboard.valid_move?(move_on_column_index)).to be false
+      end
+    end
+
+    context 'when a move is valid' do
+      it 'returns true' do
+        move_on_column_index = 1
+        board_invalid = [
+          ['x', '', '', '', '', '', ''],
+          ['o', '', '', '', '', '', ''],
+          ['x', 'o', '', '', '', '', ''],
+          ['x', 'x', 'x', 'x', '', '', ''],
+          ['o', 'o', 'x', 'o', '', '', ''],
+          ['x', 'x', 'o', 'o', '', '', 'o']
+        ]
+        gboard.instance_variable_set(:@board, board_invalid)
+        expect(gboard.valid_move?(move_on_column_index)).to be true
+      end
+    end
+  end
+
   describe '#horizontal_winner?' do
     subject(:gboard) { described_class.new(6, 7) }
 

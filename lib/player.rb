@@ -11,7 +11,7 @@
 class Player
   attr_reader :id, :avatar, :name, :wins, :losses
 
-  # Initializes Player instance
+  # Initializes Player instance.
   def initialize(id, avatar)
     @id = id
     @avatar = avatar
@@ -20,7 +20,7 @@ class Player
     @losses = 0
   end
 
-  # Asks for the user name
+  # Asks for the user name.
   def ask_for_name
     puts 'Enter a user name'
     user_name = gets.chomp
@@ -33,12 +33,12 @@ class Player
     user_name
   end
 
-  # Increments the wins
+  # Increments the player wins.
   def increment_win
     @wins += 1
   end
 
-  # Increments the losses
+  # Increments the player losses.
   def increment_loss
     @losses += 1
   end

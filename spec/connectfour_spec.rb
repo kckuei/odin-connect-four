@@ -66,6 +66,59 @@ describe Board do
     end
   end
 
+  describe '#update_board' do
+    subject(:gboard) { described_class.new(6, 7) }
+
+    context 'when player x adds a piece to col index 0 of an empty board' do
+      it 'it falls to the bottom (x appears at [5][0])' do
+        avatar = 'x'
+        col_index = 0
+        gboard.update_board(col_index, avatar)
+        board = gboard.instance_variable_get(:@board)
+        expect(board[5][0]).to eq('x')
+      end
+    end
+
+    context 'when player x adds a piece to col index 6 of an empty board' do
+      it 'it falls to the bottom (x appears at [5][6])' do
+        avatar = 'x'
+        col_index = 6
+        gboard.update_board(col_index, avatar)
+        board = gboard.instance_variable_get(:@board)
+        expect(board[5][6]).to eq('x')
+      end
+    end
+
+    context 'when player a piece is aded to a populated board' do
+      it 'it falls on top of existing pieces' do
+        board = [
+          ['', '', '', '', '', '', ''],
+          ['', '', '', '', '', '', ''],
+          ['x', '', '', '', 'x', '', ''],
+          ['x', 'x', '', 'o', 'x', '', ''],
+          ['o', 'o', 'x', 'o', 'o', '', ''],
+          ['x', 'x', 'o', 'o', 'x', 'o', '']
+        ]
+        gboard.instance_variable_set(:@board, board)
+
+        avatar = 'S'
+        col_index = 2
+        board_expect = [
+          ['', '', '', '', '', '', ''],
+          ['', '', '', '', '', '', ''],
+          ['x', '', '', '', 'x', '', ''],
+          ['x', 'x', 'S', 'o', 'x', '', ''],
+          ['o', 'o', 'x', 'o', 'o', '', ''],
+          ['x', 'x', 'o', 'o', 'x', 'o', '']
+        ]
+        gboard.update_board(col_index, avatar)
+
+        board = gboard.instance_variable_get(:@board)
+        expect(board).to eq(board_expect)
+      end
+    end
+  end
+
   describe '#horizontal_winner?' do
     subject(:gboard) { described_class.new(6, 7) }
 

@@ -9,7 +9,7 @@
 #   @mapping - 1D to 2D mapping (not used)
 #   @diaganols - a nested array, representing all the diaganols to check for a win condition
 class Board
-  attr_accessor :board # TEMPORARY ACCESSOR FOR TESTING
+  attr_reader :rows, :columns
 
   # Initializes Board instance
   def initialize(rows = 6, columns = 7)

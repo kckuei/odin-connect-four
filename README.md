@@ -1,10 +1,8 @@
 # Connect Four
-Toy command line Connect Four game implemented with `ruby` and `rspec` using a test driven development (TDD) approach. 
-
-👉[Live demo.](https://replit.com/@KevinKuei/Connect-Four#main.rb)👈
+Toy command line Connect Four game implemented with `ruby` and `rspec` using a test driven development (TDD) approach. 👉[Live demo.](https://replit.com/@KevinKuei/Connect-Four#main.rb)👈
 
 ### About
-==============
+___
 * [Connect 4 Wiki](https://en.wikipedia.org/wiki/Connect_Four)
 * Game gist:
   * It's a two player connection board game.
@@ -14,14 +12,14 @@ Toy command line Connect Four game implemented with `ruby` and `rspec` using a t
   * Losing player must surrender their life savings the victor. 🙃
 
 ### Design Ramblings & Notes
-==============
-* I borrowed some code snippets from my tic-tac-toe game. One key mechanics difference is specifying moves by tile location in tic-tac-toe versus by column for connect-four. Subsequently, a 1D to 2D mapping for relating tile numbers for displays to board coordinates wasn't really required, which made implementation more straightforward.
+___
+* I borrowed some code snippets from my tic-tac-toe game. One key mechanics difference is specifying moves by tile location in tic-tac-toe versus by column for connect-four. Subsequently, a 1D to 2D mapping for relating tile numbers (for display) to board coordinates wasn't really required, which made implementation more straightforward.
 * Once nice trick for inserting pieces I realized is to insert into the first empty slot using something like a #reverse_each_with_index, and filling the first nil location to emulate the drop mechanism in connect-four.
 * For checking diaganol winning conditions, there probably is a nicer recursive solution out there than the one I implemented. Some ideas from this [Leetcode Problem](https://leetcode.com/problems/longest-line-of-consecutive-one-in-matrix/solution/). 
 * For my approach, I identify 'base' squares that I use as seeds for generating diaganol lines in the bottom-left => top-right trending, and top-left => bottom-right trending directions, keeping only tiles that reside inside the board, and recognizing that the length of the diaganol is constrained by the number of rows. This amounts to a nested array (array of different diaganols) that I check individually for a connect-four condition, similar to horizontal and vertical algorithms. 
 
 ### Example Game
-==============
+___
 ```
     ██████╗ ██████╗ ███╗   ██╗███╗   ██╗███████╗ ██████╗████████╗
     ██╔════╝██╔═══██╗████╗  ██║████╗  ██║██╔════╝██╔════╝╚══██╔══╝
